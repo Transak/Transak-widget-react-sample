@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+import logo from './transakLogo.png';
 import './App.css';
 
 import transakSDK from "@transak/transak-sdk";
@@ -18,6 +18,24 @@ export function openTransak() {
     const transak = new transakSDK(settings);
 
     transak.init();
+
+    // To get all the events
+    transak.on(transak.ALL_EVENTS, (data) => {
+        console.log(data)
+    });
+
+    // This will trigger when the user closed the widget
+    transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (eventData) => {
+        console.log(eventData);
+        transak.close();
+    });
+
+    // This will trigger when the user marks payment is made.
+    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
+        console.log(orderData);
+        window.alert("Payment Success")
+        transak.close();
+    });
 }
 
 
@@ -26,11 +44,13 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
+                <h3>
+                    Let mainstream users buy crypto in your app
+
+                    Onboard more users to crypto and increase revenue through a simple developer integration.
+                </h3>
                 <button onClick={() => openTransak()}>
-                    open trasak
+                    Buy Crypto
                 </button>
             </header>
         </div>
